@@ -22,15 +22,17 @@ class Game():
         """
         Draw the board on the console.
         """
-        print('-' * 7)
+        print('\n   1 2 3')
+        print('  ' + ('-' * 7))
         for i in range(3):
             output = ''
             for j in range(3):
                 if not j:
-                    output += '|'
+                    output += '%s |' % (i + 1)
                 output += '%s|' % self.board[i][j]
             print(output)
-            print('-' * 7)
+            print('  ' + ('-' * 7))
+        print()
 
     def wait_for_player_turn(self):
         """

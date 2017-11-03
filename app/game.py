@@ -88,6 +88,7 @@ class Game():
             self.current_player = self.playerX
 
     def is_winning(self):
+        # ROW and COLUMN check
         for i in range(3):
             board = self.state.board
             h = board[i][0] == board[i][1] and board[i][0] == board[i][2] and board[i][0] != ' '
@@ -95,6 +96,12 @@ class Game():
 
             if h or v:
                 return True
+
+        # Diagonal check
+        if board[0][0] == board[1][1] and board[1][1] == board[2][2] and board[0][0] != ' ':
+            return True
+        if board[0][2] == board[1][1] and board[1][1] == board[2][0] and board[0][2] != ' ':
+            return True
 
     def draw(self):
         print("""

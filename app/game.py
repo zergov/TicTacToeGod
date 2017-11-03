@@ -14,6 +14,7 @@ class Game():
         """
         Start the game !
         """
+        print("To make a move, use the following format: row:column")
         while not self.winner:
             self.draw_board()
             self.wait_for_player_turn()
@@ -38,5 +39,27 @@ class Game():
         """
         Wait for the player's turn.
         """
-        play = input("Enter your move: ")
-        print("Player's move: %s" % play)
+        try:
+            play = input("Enter your move: ")
+            i, j = self.get_move_coordinates(play)
+            self.board[i - 1][j - 1] = 'X'
+            print("Player's move: %s" % play)
+        except Exception as err:
+            print('\n Oops, %s' % err)
+            self.wait_for_player_turn()
+
+    def get_move_coordinates(self, move):
+        coords = move.split(':')
+        if len(coords) < 2:
+            raise Exception("Your move is in the wrong format. Use this format --> row:column") # noqa
+
+        i = int(coords[0])
+        j = int(coords[1])
+
+        if (i > 3 or i < 1) or (j > 3 or j < 1):
+            raise Exception("Your move has out of bounds coordinates.")
+
+        if self.board[i - 1][j - 1] != ' ':
+            raise Exception("This move is invalid because it's already played.") # noqa
+
+        return i, j

@@ -1,7 +1,6 @@
 class Game():
 
     def __init__(self):
-
         # initialize an empty board
         self.board = [
             [' ', ' ', ' '],
@@ -9,7 +8,15 @@ class Game():
             [' ', ' ', ' '],
         ]
 
-        self.draw_board()
+        self.winner = None
+
+    def start(self):
+        """
+        Start the game !
+        """
+        while not self.winner:
+            self.draw_board()
+            self.wait_for_player_turn()
 
     def draw_board(self):
         """
@@ -29,3 +36,5 @@ class Game():
         """
         Wait for the player's turn.
         """
+        play = input("Enter your move: ")
+        print("Player's move: %s" % play)

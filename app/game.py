@@ -51,23 +51,32 @@ class Game():
         Start the game !
         """
         print("To make a move, use the following format: row:column")
-        while not self.winner:
+
+        moves = 0
+        while not self.winner and moves < 9:
             self.state.draw_board()
             self.player_turn()
+            if self.is_winning():
+                self.winner = self.current_player
             self.next_turn()
+            moves += 1
 
+        if moves == 9 and not self.winner:
+            self.draw()
+        else:
+            self.show_winner()
 
     def player_turn(self):
         """
         Make the player makes it turn.
         """
         try:
+            print("Player '%s' is playing" % self.current_player)
             i, j = self.current_player.make_move(self.state)
             self.state.insert_move(self.current_player, i, j)
-            print("Player's move: (%s, %s)" % (i, j))
         except Exception as err:
             print('\n Oops, %s' % err)
-            self.wait_for_player_turn()
+            self.player_turn()
 
     def next_turn(self):
         """
@@ -77,3 +86,34 @@ class Game():
             self.current_player = self.playerO
         else:
             self.current_player = self.playerX
+
+    def is_winning(self):
+        for i in range(3):
+            board = self.state.board
+            h = board[i][0] == board[i][1] and board[i][0] == board[i][2] and board[i][0] != ' '
+            v = board[0][i] == board[1][i] and board[0][i] == board[2][i] and board[0][i] != ' '
+
+            if h or v:
+                return True
+
+    def draw(self):
+        print("""
+                ____
+  __/|___/|_   / __ \_________ __      __   __/|___/|_
+ |    /    /  / / / / ___/ __ `/ | /| / /  |    /    /
+/_ __/_ __|  / /_/ / /  / /_/ /| |/ |/ /  /_ __/_ __|
+ |/   |/    /_____/_/   \__,_/ |__/|__/    |/   |/
+
+        """)
+
+    def show_winner(self):
+        print("""
+                _________    __  _________   ____ _    ____________
+  __/|___/|_   / ____/   |  /  |/  / ____/  / __ \ |  / / ____/ __ \   __/|___/|_
+ |    /    /  / / __/ /| | / /|_/ / __/    / / / / | / / __/ / /_/ /  |    /    /
+/_ __/_ __|  / /_/ / ___ |/ /  / / /___   / /_/ /| |/ / /___/ _, _/  /_ __/_ __|
+ |/   |/     \____/_/  |_/_/  /_/_____/   \____/ |___/_____/_/ |_|    |/   |/
+
+        """)
+        self.state.draw_board()
+        print("WINNER IS : %s" % self.winner)

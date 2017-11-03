@@ -2,7 +2,7 @@ class GameState():
     """
     State of a Tic Tac Toe game.
     """
-    def __init__(self, playerX, playerO):
+    def __init__(self):
         self.board = [
             [' ', ' ', ' '],
             [' ', ' ', ' '],
@@ -40,7 +40,7 @@ class Game():
 
     def __init__(self, playerX, playerO):
         # initialize an Game state
-        self.state = GameState(playerX, playerO)
+        self.state = GameState()
         self.playerX = playerX
         self.playerO = playerO
         self.current_player = self.playerX

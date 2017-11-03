@@ -2,12 +2,7 @@ class GameState():
     """
     State of a Tic Tac Toe game.
     """
-    PLAYER_X = 'X'
-    PLAYER_O = 'O'
-
-    def __init__(self):
-        self.current_turn = self.PLAYER_X
-        self.winner = None
+    def __init__(self, playerX, playerO):
         self.board = [
             [' ', ' ', ' '],
             [' ', ' ', ' '],
@@ -24,24 +19,6 @@ class GameState():
         if self.board[i][j] != ' ':
             raise Exception("This move is invalid because it's already played.") # noqa
 
-
-class Game():
-
-    def __init__(self):
-        # initialize an Game state
-        self.state = GameState()
-        self.player = self.state.PLAYER_X
-        self.winner = None
-
-    def start(self):
-        """
-        Start the game !
-        """
-        print("To make a move, use the following format: row:column")
-        while not self.state.winner:
-            self.draw_board()
-            self.wait_for_player_turn()
-
     def draw_board(self):
         """
         Draw the board on the console.
@@ -53,30 +30,50 @@ class Game():
             for j in range(3):
                 if not j:
                     output += '%s |' % (i + 1)
-                output += '%s|' % self.state.board[i][j]
+                output += '%s|' % self.board[i][j]
             print(output)
             print('  ' + ('-' * 7))
         print()
 
-    def wait_for_player_turn(self):
+
+class Game():
+
+    def __init__(self, playerX, playerO):
+        # initialize an Game state
+        self.state = GameState(playerX, playerO)
+        self.playerX = playerX
+        self.playerO = playerO
+        self.current_player = self.playerX
+        self.winner = None
+
+    def start(self):
         """
-        Wait for the player's turn.
+        Start the game !
+        """
+        print("To make a move, use the following format: row:column")
+        while not self.winner:
+            self.state.draw_board()
+            self.player_turn()
+            self.next_turn()
+
+
+    def player_turn(self):
+        """
+        Make the player makes it turn.
         """
         try:
-            play = input("Enter your move: ")
-            i, j = self.get_move_coordinates(play)
-            self.state.insert_move(self.player, i - 1, j - 1)
-            print("Player's move: %s" % play)
+            i, j = self.current_player.make_move(self.state)
+            self.state.insert_move(self.current_player, i, j)
+            print("Player's move: (%s, %s)" % (i, j))
         except Exception as err:
             print('\n Oops, %s' % err)
             self.wait_for_player_turn()
 
-    def get_move_coordinates(self, move):
-        coords = move.split(':')
-        if len(coords) < 2:
-            raise Exception("Your move is in the wrong format. Use this format --> row:column") # noqa
-
-        i = int(coords[0])
-        j = int(coords[1])
-
-        return i, j
+    def next_turn(self):
+        """
+        Initiate the next turn.
+        """
+        if self.current_player is self.playerX:
+            self.current_player = self.playerO
+        else:
+            self.current_player = self.playerX

@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from app.game import Game
+from app.player import HumanPlayer
 
 print("""
   ________________   _________   ______   __________  ______   ______          __
@@ -12,6 +13,8 @@ print("""
 ________________________________________________________________________________
 """)
 
+player1 = HumanPlayer('X')
+player2 = HumanPlayer('O')
 
-game = Game()
+game = Game(player1, player2)
 game.start()

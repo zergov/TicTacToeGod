@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from app.game import Game
-from app.player import HumanPlayer
+from app.player import HumanPlayer, GodPlayer
 
 print("""
   ________________   _________   ______   __________  ______   ______          __
@@ -14,7 +14,7 @@ ________________________________________________________________________________
 """)
 
 player1 = HumanPlayer('X')
-player2 = HumanPlayer('O')
+player2 = GodPlayer('O')
 
 game = Game(player1, player2)
 game.start()

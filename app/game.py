@@ -11,7 +11,7 @@ class GameState():
 
     def insert_move(self, player, i, j):
         self.assert_valid_move(i, j)
-        self.board[i][j] = player
+        self.board[i][j] = str(player)
 
     def assert_valid_move(self, i, j):
         if (i > 2 or i < 0) or (j > 2 or j < 0):
@@ -35,6 +35,29 @@ class GameState():
             print('  ' + ('-' * 7))
         print()
 
+    def is_winning(self):
+        # ROW and COLUMN check
+        for i in range(3):
+            board = self.board
+            h = board[i][0] == board[i][1] and board[i][0] == board[i][2] and board[i][0] != ' '
+            v = board[0][i] == board[1][i] and board[0][i] == board[2][i] and board[0][i] != ' '
+
+            if h or v:
+                return board[i][0]
+
+        # Diagonal check
+        if board[0][0] == board[1][1] and board[1][1] == board[2][2] and board[0][0] != ' ':
+            return board[0][0]
+        if board[0][2] == board[1][1] and board[1][1] == board[2][0] and board[0][2] != ' ':
+            return board[0][2]
+
+    def game_is_draw(self):
+        for i in range(3):
+            for j in range(3):
+                if self.board[i][j] == ' ':
+                    return False
+        return True
+
 
 class Game():
 
@@ -56,7 +79,7 @@ class Game():
         while not self.winner and moves < 9:
             self.state.draw_board()
             self.player_turn()
-            if self.is_winning():
+            if self.state.is_winning():
                 self.winner = self.current_player
             self.next_turn()
             moves += 1
@@ -86,22 +109,6 @@ class Game():
             self.current_player = self.playerO
         else:
             self.current_player = self.playerX
-
-    def is_winning(self):
-        # ROW and COLUMN check
-        for i in range(3):
-            board = self.state.board
-            h = board[i][0] == board[i][1] and board[i][0] == board[i][2] and board[i][0] != ' '
-            v = board[0][i] == board[1][i] and board[0][i] == board[2][i] and board[0][i] != ' '
-
-            if h or v:
-                return True
-
-        # Diagonal check
-        if board[0][0] == board[1][1] and board[1][1] == board[2][2] and board[0][0] != ' ':
-            return True
-        if board[0][2] == board[1][1] and board[1][1] == board[2][0] and board[0][2] != ' ':
-            return True
 
     def draw(self):
         print("""

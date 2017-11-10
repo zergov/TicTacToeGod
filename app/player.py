@@ -73,14 +73,14 @@ class GodPlayer(Player):
                     return True
         return False
 
-    def minimax(self, board, is_max):
+    def minimax(self, board, depth, is_max):
         score = self.evaluate_board(board)
 
         if score == 10:
-            return score
+            return score - depth
 
         if score == -10:
-            return score
+            return score - depth
 
         if not self.has_more_move(board):
             return 0
@@ -92,7 +92,7 @@ class GodPlayer(Player):
                 for j in range(3):
                     if board[i][j] == ' ':
                         board[i][j] = self.symbol
-                        best = max(best, self.minimax(board, False))
+                        best = max(best, self.minimax(board, depth + 1, False))
                         board[i][j] = ' '
             return best
         else:       # if human is playing
@@ -102,7 +102,7 @@ class GodPlayer(Player):
                 for j in range(3):
                     if board[i][j] == ' ':
                         board[i][j] = 'X'
-                        best = min(best, self.minimax(board, True))
+                        best = min(best, self.minimax(board, depth + 1, True))
                         board[i][j] = ' '
             return best
 
@@ -116,7 +116,7 @@ class GodPlayer(Player):
                 if board[i][j] == ' ':
 
                     board[i][j] = self.symbol  # make the move
-                    score = self.minimax(board, False)
+                    score = self.minimax(board, 0, False)
                     board[i][j] = ' '  # revert the move
 
                     if score > best_score:
